@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: invdeploy
+  name: invdeploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invdeploy
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: invdeploy
+    spec:
+      containers:
+      - image: eswaribala/rpsboainvlab:inv-app
+        name: invapp-c1
+        resources: {}
+        env:
+            - name: MYSQL_URL
+              value: jdbc:mysql://mysql:3306/boajan2022ecommercedb?useSSL=false
+               
+
+status: {}
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: invservice
+  name: invservice
+spec:
+  ports:
+  - name: 7076-7070
+    port: 7070
+    protocol: TCP
+    targetPort: 7076
+  selector:
+    app: invdeploy
+  type: ClusterIP
+status:
+  loadBalancer: {}
